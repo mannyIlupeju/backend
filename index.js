@@ -6,10 +6,10 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 
 
+
 //Import Routes
-
 const blogRoute = require('./routes/blog')
-
+const authRoute = require('./routes/auth')
 
 //setting up the body parser
 app.use(bodyParser.json({limit: "30mb", extended: true}))
@@ -22,6 +22,7 @@ app.use(cors())
 //Creating middlewares
 
 app.use('/blog', blogRoute)
+app.use('/blog/auth', authRoute)
 
 const PORT = process.env.PORT || 8080
 

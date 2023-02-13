@@ -15,10 +15,7 @@ const registerValidation = (data) => {
 }
 
 
-
-
-
- const loginValidation = (data) => {
+const loginValidation = (data) => {
 
   //create schema object that will validate each key - name, email, password
   const schema = Joi.object({

@@ -1,5 +1,8 @@
+const { JsonWebTokenError } = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const blogMessage = require('../models/blogMessage')
+const verify = require('../routes/verifyToken')
+const jwt = ('jsonwebtoken')
 
 
 const getPost = async (req,res)=>{
@@ -28,8 +31,8 @@ const createPost = async(req,res) => {
   //To create new post push post inside blogMessage function
   const newPost = new blogMessage(post)
   try {
+    console.log(req)
     await newPost.save();
-
     res.status(201).json(newPost)
   } catch (error) {
     res.status(409).json({message: error.message})
