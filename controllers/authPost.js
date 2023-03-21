@@ -3,6 +3,7 @@ const User = require('../models/auth')
 const jwt = require('jsonwebtoken') //for login verification
 const bcrypt = require('bcryptjs') //we use this to protect the password 
 const {registerValidation, loginValidation} = require('../validation')
+const { isError, valid } = require('joi')
 
 
 const registerPost = async (req,res)=>{
@@ -10,19 +11,15 @@ const registerPost = async (req,res)=>{
   const {error} = registerValidation(req.body)
   if(error) return res.status(400).send(error.details[0].message)
 
-
-
   //check if user is in database
   const emailExist = await User.findOne({email: req.body.email})
   if (emailExist) res.status(400).send('Email already exists')
-
 
   //Hash the password - We must protect password from being visible when we save it
   const salt = await bcrypt.genSalt(10) //the complexity of the string that will get generated to protect our password
   const hashedPassword = await bcrypt.hash(req.body.password, salt)
 
-
-
+  
   // To Create a new user
   const user = new User({
     name: req.body.name,
@@ -45,11 +42,14 @@ const loginPost = async (req,res)=>{
 
    //CHECK IF USER EXISTS
    const user = await User.findOne({email: req.body.email})
-   if(!user) return res.status(400).send("Email is not found")
+   if(!user) return res.status(400).send("Email is not found") 
+   
+   
 
    //CHECK IF PASSWORD IS CORRECT
    const validPass = await bcrypt.compare(req.body.password, user.password) 
    if(!validPass) return res.status(400).send('Login failed')
+
    
   //Create and assign a token
   //it takes the ID to know the user is logged in and a secret token
@@ -57,6 +57,9 @@ const loginPost = async (req,res)=>{
   res.header('Authorization', token).send({token})
 
 }
+
+
+
 
 
 module.exports = {registerPost, loginPost}

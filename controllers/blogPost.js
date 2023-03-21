@@ -31,7 +31,6 @@ const createPost = async(req,res) => {
   //To create new post push post inside blogMessage function
   const newPost = new blogMessage(post)
   try {
-    console.log(req)
     await newPost.save();
     res.status(201).json(newPost)
   } catch (error) {
@@ -40,7 +39,7 @@ const createPost = async(req,res) => {
 }
 
 const deletePost = async(req, res) => {
-  const {id: id} = req.params
+  const {id} = req.params
 
   if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id')
 
@@ -51,5 +50,19 @@ const deletePost = async(req, res) => {
 }
 
 
-module.exports = {getPost, createPost, readPost, deletePost}
+const likePost = async(req, res) => {
+  const {id} = req.params
+  
+  if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id')
+
+  const post = await blogMessage.findById(id)
+
+  const updatedPost = await blogMessage.findByIdAndUpdate(id, {likeCount: post.likeCount + 1}, {new: true})
+
+  res.json(updatedPost)
+}
+
+
+
+module.exports = {getPost, createPost, readPost, deletePost, likePost}
 

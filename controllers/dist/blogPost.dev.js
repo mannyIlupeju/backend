@@ -85,28 +85,27 @@ var createPost = function createPost(req, res) {
 
           newPost = new blogMessage(post);
           _context3.prev = 2;
-          console.log(req);
-          _context3.next = 6;
+          _context3.next = 5;
           return regeneratorRuntime.awrap(newPost.save());
 
-        case 6:
+        case 5:
           res.status(201).json(newPost);
-          _context3.next = 12;
+          _context3.next = 11;
           break;
 
-        case 9:
-          _context3.prev = 9;
+        case 8:
+          _context3.prev = 8;
           _context3.t0 = _context3["catch"](2);
           res.status(409).json({
             message: _context3.t0.message
           });
 
-        case 12:
+        case 11:
         case "end":
           return _context3.stop();
       }
     }
-  }, null, null, [[2, 9]]);
+  }, null, null, [[2, 8]]);
 };
 
 var deletePost = function deletePost(req, res) {
@@ -141,10 +140,51 @@ var deletePost = function deletePost(req, res) {
   });
 };
 
+var likePost = function likePost(req, res) {
+  var id, post, updatedPost;
+  return regeneratorRuntime.async(function likePost$(_context5) {
+    while (1) {
+      switch (_context5.prev = _context5.next) {
+        case 0:
+          id = req.params.id;
+
+          if (mongoose.Types.ObjectId.isValid(id)) {
+            _context5.next = 3;
+            break;
+          }
+
+          return _context5.abrupt("return", res.status(404).send('No post with that id'));
+
+        case 3:
+          _context5.next = 5;
+          return regeneratorRuntime.awrap(blogMessage.findById(id));
+
+        case 5:
+          post = _context5.sent;
+          _context5.next = 8;
+          return regeneratorRuntime.awrap(blogMessage.findByIdAndUpdate(id, {
+            likeCount: post.likeCount + 1
+          }, {
+            "new": true
+          }));
+
+        case 8:
+          updatedPost = _context5.sent;
+          res.json(updatedPost);
+
+        case 10:
+        case "end":
+          return _context5.stop();
+      }
+    }
+  });
+};
+
 module.exports = {
   getPost: getPost,
   createPost: createPost,
   readPost: readPost,
-  deletePost: deletePost
+  deletePost: deletePost,
+  likePost: likePost
 };
 //# sourceMappingURL=blogPost.dev.js.map

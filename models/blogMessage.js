@@ -8,6 +8,10 @@ const blogSchema = mongoose.Schema({
   tags: [String],
   link: String,
   selectedFile: String,
+  likeCount: {
+    type: Number,
+    default: 0
+  },
   description: String,
   createdAt: {
     type: Date,

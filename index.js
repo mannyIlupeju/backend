@@ -29,7 +29,7 @@ const PORT = process.env.PORT || 8080
 //CONNECTING TO MONGOOSE
 mongoose.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology:true })
 .then(()=> app.listen(PORT, ()=>{
-  console.log('Server is up and running')
+  console.log(`Server is up and running in port ${PORT}`)
 }))
 .catch((error)=>console.log(error))
 

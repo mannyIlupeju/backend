@@ -12,6 +12,10 @@ var _require = require('../validation'),
     registerValidation = _require.registerValidation,
     loginValidation = _require.loginValidation;
 
+var _require2 = require('joi'),
+    isError = _require2.isError,
+    valid = _require2.valid;
+
 var registerPost = function registerPost(req, res) {
   var _registerValidation, error, emailExist, salt, hashedPassword, user, savedUser;
 
